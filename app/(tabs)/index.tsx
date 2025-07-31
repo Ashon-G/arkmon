@@ -9,7 +9,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import Multi3DViewer from '@/components/Multi3DViewer';
+import Simple3DViewer from '@/components/Simple3DViewer';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -148,17 +148,9 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.mainContainer}>
-        {/* Top half - 3D GLB Models */}
+        {/* Top half - 3D Models */}
         <View style={styles.topHalf}>
-          <Multi3DViewer
-            models={[
-              'https://cdn.builder.io/o/assets%2F2cc8e052980a46afac6d7681a3037898%2F43ec210a415e4b21b85cfc287f34271c?alt=media&token=0b5eab0b-deb8-4602-b15e-3ee7979ec47a&apiKey=2cc8e052980a46afac6d7681a3037898',
-              'https://cdn.builder.io/o/assets%2F2cc8e052980a46afac6d7681a3037898%2Fd0376ace123c4a319ad4d95f4fff9ce9?alt=media&token=a356a70b-7927-456f-a2a3-8123896ec4ca&apiKey=2cc8e052980a46afac6d7681a3037898',
-              'https://cdn.builder.io/o/assets%2F2cc8e052980a46afac6d7681a3037898%2F851d685b8b7546c9a050aba2be522354?alt=media&token=cad117b4-680b-4a9e-ac17-d116d6cd552c&apiKey=2cc8e052980a46afac6d7681a3037898',
-              'https://cdn.builder.io/o/assets%2F2cc8e052980a46afac6d7681a3037898%2Feb234d941a9547d0990faba6aee0c870?alt=media&token=8be89704-ec80-46dd-a611-4d30beb53e08&apiKey=2cc8e052980a46afac6d7681a3037898'
-            ]}
-            style={styles.primaryModel}
-          />
+          <Simple3DViewer style={styles.primaryModel} />
 
           {/* SSR Badge positioned over the 3D model */}
           <SSRBadge />
