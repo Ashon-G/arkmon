@@ -5,12 +5,11 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  ImageBackground,
   Dimensions,
   SafeAreaView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Image } from 'expo-image';
+import GLBViewer from '@/components/GLBViewer';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -148,16 +147,21 @@ const SSRBadge = () => {
 export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.backgroundContainer}>
-        {/* Background creature image */}
-        <Image
-          source="https://cdn.builder.io/api/v1/image/assets%2F2cc8e052980a46afac6d7681a3037898%2F508b8285dfa04c7489996057b9eb9826?format=webp&width=800"
-          style={styles.backgroundImage}
-          contentFit="cover"
-        />
+      <View style={styles.mainContainer}>
+        {/* Top half - 3D GLB Models */}
+        <View style={styles.topHalf}>
+          <GLBViewer
+            modelUrl="https://cdn.builder.io/o/assets%2F2cc8e052980a46afac6d7681a3037898%2F43ec210a415e4b21b85cfc287f34271c?alt=media&token=0b5eab0b-deb8-4602-b15e-3ee7979ec47a&apiKey=2cc8e052980a46afac6d7681a3037898"
+            style={styles.primaryModel}
+          />
 
-        {/* Main content overlay */}
-        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+          {/* SSR Badge positioned over the 3D model */}
+          <SSRBadge />
+        </View>
+
+        {/* Bottom half - UI Content */}
+        <View style={styles.bottomHalf}>
+          <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
           {/* Main Content Container */}
           <View style={styles.contentContainer}>
             
@@ -220,9 +224,8 @@ export default function HomeScreen() {
             </LinearGradient>
           </View>
 
-          {/* SSR Badge positioned over the creature */}
-          <SSRBadge />
-        </ScrollView>
+          </ScrollView>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -233,29 +236,28 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#000',
   },
-  backgroundContainer: {
+  mainContainer: {
     flex: 1,
+  },
+  topHalf: {
+    height: screenHeight * 0.5,
+    backgroundColor: 'rgba(20, 20, 25, 0.95)',
     position: 'relative',
   },
-  backgroundImage: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    width: '100%',
-    height: '100%',
+  primaryModel: {
+    flex: 1,
+  },
+  bottomHalf: {
+    height: screenHeight * 0.5,
+    backgroundColor: 'rgba(10, 10, 15, 0.8)',
   },
   scrollView: {
     flex: 1,
-    position: 'relative',
-    zIndex: 1,
   },
   contentContainer: {
-    minHeight: screenHeight,
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
     paddingBottom: 20,
-    paddingTop: screenHeight * 0.4,
+    paddingTop: 10,
   },
   header: {
     backgroundColor: '#191919',
@@ -503,11 +505,11 @@ const styles = StyleSheet.create({
   },
   ssrBadge: {
     position: 'absolute',
-    top: 60,
-    left: 40,
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    top: 20,
+    left: 20,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     borderWidth: 3,
     borderColor: '#FF3E13',
     shadowColor: '#FE6824',
