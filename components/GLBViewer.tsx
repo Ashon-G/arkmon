@@ -144,6 +144,7 @@ export default function GLBViewer({ modelUrl, style }: GLBViewerProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'transparent',
   },
   glView: {
     flex: 1,
