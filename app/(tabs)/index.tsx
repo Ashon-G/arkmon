@@ -9,7 +9,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import Simple3DViewer from '@/components/Simple3DViewer';
+import GLBViewer from '@/components/GLBViewer';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -150,7 +150,10 @@ export default function HomeScreen() {
       <View style={styles.mainContainer}>
         {/* Top half - 3D Models */}
         <View style={styles.topHalf}>
-          <Simple3DViewer style={styles.primaryModel} />
+          <GLBViewer
+            modelUrl="https://cdn.builder.io/o/assets%2F2cc8e052980a46afac6d7681a3037898%2Ff6df47a7beaa49b68cee4916e6109095?alt=media&token=ae226693-590a-4155-abb5-e8813b48602a&apiKey=2cc8e052980a46afac6d7681a3037898"
+            style={styles.primaryModel}
+          />
 
           {/* SSR Badge positioned over the 3D model */}
           <SSRBadge />
