@@ -54,7 +54,7 @@ export default function GLBViewer({ modelUrl, style }: GLBViewerProps) {
       opacity: 0.8
     });
     const fallbackMesh = new THREE.Mesh(fallbackGeometry, fallbackMaterial);
-    fallbackMesh.position.set(0, -1, 0);
+    fallbackMesh.position.set(0, 0.5, 0);
     scene.add(fallbackMesh);
 
     // Start animation immediately with fallback
@@ -63,7 +63,7 @@ export default function GLBViewer({ modelUrl, style }: GLBViewerProps) {
 
       const time = Date.now() * 0.001;
       fallbackMesh.rotation.y += 0.003;
-      fallbackMesh.position.y = -1 + Math.sin(time * 0.5) * 0.2;
+      fallbackMesh.position.y = 0.5 + Math.sin(time * 0.5) * 0.2;
 
       renderer.render(scene, camera);
       gl.endFrameEXP();
@@ -81,9 +81,9 @@ export default function GLBViewer({ modelUrl, style }: GLBViewerProps) {
         // Remove fallback mesh when real model loads
         scene.remove(fallbackMesh);
 
-        // Scale and position the model for optimal viewing
-        model.scale.set(2, 2, 2);
-        model.position.set(0, -2, 0);
+        // Scale and position the model for optimal viewing - bigger and higher up
+        model.scale.set(4, 4, 4);
+        model.position.set(0, 0, 0);
 
         // Set initial rotation for better angle
         model.rotation.y = Math.PI * 0.15;
@@ -102,8 +102,8 @@ export default function GLBViewer({ modelUrl, style }: GLBViewerProps) {
             loader.load(uri, (gltf) => {
               const model = gltf.scene;
               scene.remove(fallbackMesh);
-              model.scale.set(2, 2, 2);
-              model.position.set(0, -2, 0);
+              model.scale.set(4, 4, 4);
+              model.position.set(0, 0, 0);
               model.rotation.y = Math.PI * 0.15;
               model.rotation.x = -0.1;
               scene.add(model);
