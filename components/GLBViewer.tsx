@@ -20,7 +20,7 @@ export default function GLBViewer({ modelUrl, style }: GLBViewerProps) {
     // Create renderer
     const renderer = new Renderer({ gl });
     renderer.setSize(width, height);
-    renderer.setClearColor(0x000000, 0); // Transparent background
+    renderer.setClearColor(0x000000, 0); // Fully transparent background
 
     // Create scene
     const scene = new THREE.Scene();
