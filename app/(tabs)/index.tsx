@@ -7,8 +7,10 @@ import {
   TouchableOpacity,
   ImageBackground,
   Dimensions,
+  SafeAreaView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Image } from 'expo-image';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
