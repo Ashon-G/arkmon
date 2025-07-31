@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import GLBViewer from '@/components/GLBViewer';
-import SummoningBackground from '@/components/SummoningBackground';
+import SimpleSummoningBackground from '@/components/SimpleSummoningBackground';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
