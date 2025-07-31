@@ -28,13 +28,21 @@ export default function GLBViewer({ modelUrl, style }: GLBViewerProps) {
     const camera = new PerspectiveCamera(75, width / height, 0.1, 1000);
     camera.position.set(0, 0, 5);
 
-    // Add lighting
-    const ambientLight = new AmbientLight(0xffffff, 0.6);
+    // Add lighting for game-like appearance
+    const ambientLight = new AmbientLight(0x404040, 0.4);
     scene.add(ambientLight);
 
-    const directionalLight = new DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(10, 10, 5);
-    scene.add(directionalLight);
+    const mainLight = new DirectionalLight(0xffffff, 1.0);
+    mainLight.position.set(5, 10, 5);
+    scene.add(mainLight);
+
+    const fillLight = new DirectionalLight(0x0099ff, 0.3);
+    fillLight.position.set(-5, 0, 2);
+    scene.add(fillLight);
+
+    const rimLight = new DirectionalLight(0xff4400, 0.4);
+    rimLight.position.set(0, 5, -5);
+    scene.add(rimLight);
 
     // Load GLB model
     try {
@@ -47,12 +55,13 @@ export default function GLBViewer({ modelUrl, style }: GLBViewerProps) {
       loader.load(uri, (gltf) => {
         const model = gltf.scene;
         
-        // Scale and position the model
-        model.scale.set(1, 1, 1);
-        model.position.set(0, -1, 0);
-        
-        // Add rotation animation
-        model.rotation.y = Math.PI * 0.25;
+        // Scale and position the model for optimal viewing
+        model.scale.set(2, 2, 2);
+        model.position.set(0, -2, 0);
+
+        // Set initial rotation for better angle
+        model.rotation.y = Math.PI * 0.15;
+        model.rotation.x = -0.1;
         
         scene.add(model);
         
@@ -60,16 +69,28 @@ export default function GLBViewer({ modelUrl, style }: GLBViewerProps) {
         const animate = () => {
           timeoutRef.current = setTimeout(animate, 1000 / 60);
           
-          // Slowly rotate the model
-          model.rotation.y += 0.005;
+          // Gentle floating animation
+          const time = Date.now() * 0.001;
+          model.rotation.y += 0.003;
+          model.position.y = -2 + Math.sin(time * 0.5) * 0.1;
           
           renderer.render(scene, camera);
           gl.endFrameEXP();
         };
         
         animate();
-      }, undefined, (error) => {
+      }, (progress) => {
+        // Loading progress
+        console.log('Loading progress:', progress);
+      }, (error) => {
         console.warn('Error loading GLB model:', error);
+        // Fallback - just render the scene without model
+        const animate = () => {
+          timeoutRef.current = setTimeout(animate, 1000 / 60);
+          renderer.render(scene, camera);
+          gl.endFrameEXP();
+        };
+        animate();
       });
     } catch (error) {
       console.warn('Error downloading GLB model:', error);
