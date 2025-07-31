@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import GLBViewer from '@/components/GLBViewer';
+import SummoningBackground from '@/components/SummoningBackground';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -148,15 +149,17 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.mainContainer}>
-        {/* Top half - 3D Models */}
+        {/* Top half - 3D Models with Summoning Background */}
         <View style={styles.topHalf}>
-          <GLBViewer
-            modelUrl="https://cdn.builder.io/o/assets%2F2cc8e052980a46afac6d7681a3037898%2Ff6df47a7beaa49b68cee4916e6109095?alt=media&token=ae226693-590a-4155-abb5-e8813b48602a&apiKey=2cc8e052980a46afac6d7681a3037898"
-            style={styles.primaryModel}
-          />
+          <SummoningBackground>
+            <GLBViewer
+              modelUrl="https://cdn.builder.io/o/assets%2F2cc8e052980a46afac6d7681a3037898%2Ff6df47a7beaa49b68cee4916e6109095?alt=media&token=ae226693-590a-4155-abb5-e8813b48602a&apiKey=2cc8e052980a46afac6d7681a3037898"
+              style={styles.primaryModel}
+            />
 
-          {/* SSR Badge positioned over the 3D model */}
-          <SSRBadge />
+            {/* SSR Badge positioned over the magical scene */}
+            <SSRBadge />
+          </SummoningBackground>
         </View>
 
         {/* Bottom half - UI Content */}
@@ -241,11 +244,12 @@ const styles = StyleSheet.create({
   },
   topHalf: {
     height: screenHeight * 0.5,
-    backgroundColor: 'rgba(20, 20, 25, 0.95)',
     position: 'relative',
+    overflow: 'hidden',
   },
   primaryModel: {
     flex: 1,
+    zIndex: 5,
   },
   bottomHalf: {
     height: screenHeight * 0.5,
