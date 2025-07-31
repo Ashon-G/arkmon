@@ -45,17 +45,42 @@ export default function GLBViewer({ modelUrl, style }: GLBViewerProps) {
     rimLight.position.set(0, 5, -5);
     scene.add(rimLight);
 
-    // Load GLB model
+    // Create a simple fallback geometry first
+    const fallbackGeometry = new THREE.SphereGeometry(1.5, 32, 32);
+    const fallbackMaterial = new THREE.MeshLambertMaterial({
+      color: 0x00ff88,
+      emissive: 0x002200,
+      transparent: true,
+      opacity: 0.8
+    });
+    const fallbackMesh = new THREE.Mesh(fallbackGeometry, fallbackMaterial);
+    fallbackMesh.position.set(0, -1, 0);
+    scene.add(fallbackMesh);
+
+    // Start animation immediately with fallback
+    const animate = () => {
+      timeoutRef.current = setTimeout(animate, 1000 / 60);
+
+      const time = Date.now() * 0.001;
+      fallbackMesh.rotation.y += 0.003;
+      fallbackMesh.position.y = -1 + Math.sin(time * 0.5) * 0.2;
+
+      renderer.render(scene, camera);
+      gl.endFrameEXP();
+    };
+    animate();
+
+    // Try to load GLB model
     try {
       const loader = new GLTFLoader();
-      
-      // Download the GLB file locally first
-      const fileUri = FileSystem.documentDirectory + 'model.glb';
-      const { uri } = await FileSystem.downloadAsync(modelUrl, fileUri);
-      
-      loader.load(uri, (gltf) => {
+
+      // Try direct loading first, fallback to local download
+      loader.load(modelUrl, (gltf) => {
         const model = gltf.scene;
-        
+
+        // Remove fallback mesh when real model loads
+        scene.remove(fallbackMesh);
+
         // Scale and position the model for optimal viewing
         model.scale.set(2, 2, 2);
         model.position.set(0, -2, 0);
@@ -63,35 +88,35 @@ export default function GLBViewer({ modelUrl, style }: GLBViewerProps) {
         // Set initial rotation for better angle
         model.rotation.y = Math.PI * 0.15;
         model.rotation.x = -0.1;
-        
+
         scene.add(model);
-        
-        // Animation loop
-        const animate = () => {
-          timeoutRef.current = setTimeout(animate, 1000 / 60);
-          
-          // Gentle floating animation
-          const time = Date.now() * 0.001;
-          model.rotation.y += 0.003;
-          model.position.y = -2 + Math.sin(time * 0.5) * 0.1;
-          
-          renderer.render(scene, camera);
-          gl.endFrameEXP();
-        };
-        
-        animate();
+
+        console.log('GLB model loaded successfully!');
       }, (progress) => {
-        // Loading progress
-        console.log('Loading progress:', progress);
+        console.log('Loading GLB progress:', progress);
       }, (error) => {
-        console.warn('Error loading GLB model:', error);
-        // Fallback - just render the scene without model
-        const animate = () => {
-          timeoutRef.current = setTimeout(animate, 1000 / 60);
-          renderer.render(scene, camera);
-          gl.endFrameEXP();
-        };
-        animate();
+        console.warn('Direct GLB load failed, trying local download:', error);
+        // Try downloading locally as fallback
+        FileSystem.downloadAsync(modelUrl, FileSystem.documentDirectory + 'model.glb')
+          .then(({ uri }) => {
+            loader.load(uri, (gltf) => {
+              const model = gltf.scene;
+              scene.remove(fallbackMesh);
+              model.scale.set(2, 2, 2);
+              model.position.set(0, -2, 0);
+              model.rotation.y = Math.PI * 0.15;
+              model.rotation.x = -0.1;
+              scene.add(model);
+              console.log('GLB model loaded from local file!');
+            }, undefined, (localError) => {
+              console.warn('Local GLB load also failed:', localError);
+              // Keep using fallback mesh
+            });
+          })
+          .catch((downloadError) => {
+            console.warn('GLB download failed:', downloadError);
+            // Keep using fallback mesh
+          });
       });
     } catch (error) {
       console.warn('Error downloading GLB model:', error);
