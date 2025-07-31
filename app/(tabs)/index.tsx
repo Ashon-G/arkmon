@@ -147,12 +147,16 @@ const SSRBadge = () => {
 
 export default function HomeScreen() {
   return (
-    <View style={styles.container}>
-      <ImageBackground
-        source={{ uri: 'https://cdn.builder.io/api/v1/image/assets%2F2cc8e052980a46afac6d7681a3037898%2F508b8285dfa04c7489996057b9eb9826?format=webp&width=800' }}
-        style={styles.backgroundImage}
-        resizeMode="cover"
-      >
+    <SafeAreaView style={styles.container}>
+      <View style={styles.backgroundContainer}>
+        {/* Background creature image */}
+        <Image
+          source="https://cdn.builder.io/api/v1/image/assets%2F2cc8e052980a46afac6d7681a3037898%2F508b8285dfa04c7489996057b9eb9826?format=webp&width=800"
+          style={styles.backgroundImage}
+          contentFit="cover"
+        />
+
+        {/* Main content overlay */}
         <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
           {/* Main Content Container */}
           <View style={styles.contentContainer}>
@@ -219,8 +223,8 @@ export default function HomeScreen() {
           {/* SSR Badge positioned over the creature */}
           <SSRBadge />
         </ScrollView>
-      </ImageBackground>
-    </View>
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -229,13 +233,23 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#000',
   },
-  backgroundImage: {
+  backgroundContainer: {
     flex: 1,
-    width: screenWidth,
-    height: screenHeight,
+    position: 'relative',
+  },
+  backgroundImage: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    width: '100%',
+    height: '100%',
   },
   scrollView: {
     flex: 1,
+    position: 'relative',
+    zIndex: 1,
   },
   contentContainer: {
     flex: 1,
