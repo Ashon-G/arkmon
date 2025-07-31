@@ -1,7 +1,8 @@
 import React, { useRef, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { GLView } from 'expo-gl';
-import { Renderer, Scene, PerspectiveCamera, AmbientLight, DirectionalLight } from 'expo-three';
+import { Renderer } from 'expo-three';
+import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as FileSystem from 'expo-file-system';
 
@@ -22,25 +23,25 @@ export default function GLBViewer({ modelUrl, style }: GLBViewerProps) {
     renderer.setClearColor(0x000000, 0); // Transparent background
 
     // Create scene
-    const scene = new Scene();
+    const scene = new THREE.Scene();
 
     // Create camera
-    const camera = new PerspectiveCamera(75, width / height, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     camera.position.set(0, 0, 5);
 
     // Add lighting for game-like appearance
-    const ambientLight = new AmbientLight(0x404040, 0.4);
+    const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
     scene.add(ambientLight);
 
-    const mainLight = new DirectionalLight(0xffffff, 1.0);
+    const mainLight = new THREE.DirectionalLight(0xffffff, 1.0);
     mainLight.position.set(5, 10, 5);
     scene.add(mainLight);
 
-    const fillLight = new DirectionalLight(0x0099ff, 0.3);
+    const fillLight = new THREE.DirectionalLight(0x0099ff, 0.3);
     fillLight.position.set(-5, 0, 2);
     scene.add(fillLight);
 
-    const rimLight = new DirectionalLight(0xff4400, 0.4);
+    const rimLight = new THREE.DirectionalLight(0xff4400, 0.4);
     rimLight.position.set(0, 5, -5);
     scene.add(rimLight);
 
