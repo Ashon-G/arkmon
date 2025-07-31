@@ -151,7 +151,7 @@ export default function HomeScreen() {
       <View style={styles.mainContainer}>
         {/* Top half - 3D Models with Summoning Background */}
         <View style={styles.topHalf}>
-          <SummoningBackground>
+          <SimpleSummoningBackground>
             <GLBViewer
               modelUrl="https://cdn.builder.io/o/assets%2F2cc8e052980a46afac6d7681a3037898%2Ff6df47a7beaa49b68cee4916e6109095?alt=media&token=ae226693-590a-4155-abb5-e8813b48602a&apiKey=2cc8e052980a46afac6d7681a3037898"
               style={styles.primaryModel}
@@ -159,7 +159,7 @@ export default function HomeScreen() {
 
             {/* SSR Badge positioned over the magical scene */}
             <SSRBadge />
-          </SummoningBackground>
+          </SimpleSummoningBackground>
         </View>
 
         {/* Bottom half - UI Content */}
