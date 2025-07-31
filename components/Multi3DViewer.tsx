@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import GLBViewer from './GLBViewer';
+import Simple3DViewer from './Simple3DViewer';
 
 interface Multi3DViewerProps {
   models: string[];
@@ -11,19 +12,15 @@ export default function Multi3DViewer({ models, style }: Multi3DViewerProps) {
   const [currentModelIndex, setCurrentModelIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [useSimpleViewer, setUseSimpleViewer] = useState(false);
 
   const switchModel = () => {
     setCurrentModelIndex((prev) => (prev + 1) % models.length);
   };
 
-  if (hasError || models.length === 0) {
+  if (hasError || models.length === 0 || useSimpleViewer) {
     return (
-      <View style={[styles.fallbackContainer, style]}>
-        <View style={styles.fallbackContent}>
-          <Text style={styles.fallbackText}>✨</Text>
-          <Text style={styles.fallbackSubtext}>3D Model</Text>
-        </View>
-      </View>
+      <Simple3DViewer style={style} />
     );
   }
 
